@@ -4,6 +4,7 @@ from elasticsearch import Elasticsearch
 # Load CSV data
 csv_file = 'cv-valid-dev.csv'
 df = pd.read_csv(csv_file)
+df['transcription'] = df['transcription'].fillna('EMPTY TRANSCRIPTION')
 
 # Connect to Elasticsearch
 es = Elasticsearch('http://localhost:9200')
