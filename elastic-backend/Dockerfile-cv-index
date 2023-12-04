@@ -1,0 +1,9 @@
+FROM python:3.8
+
+WORKDIR /app
+
+COPY cv-index.py .
+
+RUN pip install elasticsearch
+
+CMD ["python", "cv-index.py"]
