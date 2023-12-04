@@ -6,9 +6,6 @@ import torch
 from pydub import AudioSegment
 import numpy as np
 
-#server health test command: curl http://localhost:8001/ping
-#asr_api test command: curl -F 'file=@ cv-valid-test/sample-000003.mp3' http://localhost:8001/asr
-
 app = Flask(__name__)
 
 #the pipeline object in huggingface transformers is a high-level api that abstracts away preprocessing steps for easy out-of-the-box model inference using pretrained models
@@ -17,10 +14,15 @@ pipe = pipeline("automatic-speech-recognition", model="facebook/wav2vec2-large-9
 
 @app.route('/ping', methods=['GET'])
 def ping():
+    '''Simple function to test server health'''
     return 'pong'
 
 @app.route('/asr', methods=['POST'])
 def transcribe_audio():
+    '''
+    Handles POST requests on /asr. Checks for binary audio file, parses using pydub AudioSegment then converts to torch tensor for transcription.
+    
+    '''
     if 'file' not in request.files:
         return jsonify({"error": "No file provided"}), 400
 
@@ -32,9 +34,9 @@ def transcribe_audio():
         audio_tensor = torch.tensor(audio_array, dtype=torch.float32)
         rate = audio.frame_rate
 
-        transform = torchaudio.transforms.Resample(rate, 16000)
+        transform = torchaudio.transforms.Resample(rate, 16000) #model used requires a sample rate of 16000, so any input data must be resampled
         transformed_audio = transform(audio_tensor).squeeze().numpy()
-        duration = len(audio)/1000.0
+        duration = len(audio)/1000.0 #the duration of the audio file is the length divided by 1000
         transcription = pipe(transformed_audio)
     
         return jsonify({"transcription": transcription['text'], "duration": duration})

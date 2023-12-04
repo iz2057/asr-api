@@ -1,8 +1,8 @@
 {
-  "querySuggestFields": ["transcription"],
-  "titleField": "transcription",
+  "querySuggestFields": [""],
+  "titleField": "",
   "urlField": "",
   "thumbnailField": "",
-  "sortFields": [],
+  "sortFields": ["transcription"],
   "facets": []
 }

@@ -19,12 +19,8 @@ import { Layout } from "@elastic/react-search-ui-views";
 import "@elastic/react-search-ui-views/lib/styles/styles.css";
 
 import {
-  // buildAutocompleteQueryConfig,
-  // buildFacetConfigFromConfig,
-  // buildSearchOptionsFromConfig,
   buildSortOptionsFromConfig,
   getConfig
-  // getFacetFields
 } from "./config/config-helper";
 
 const connector = new ElasticsearchAPIConnector({
@@ -40,8 +36,8 @@ const config = {
     },
     result_fields: {
       file_path: {},
-      duration: {},
-      transcription: { snippet: {} }
+      duration: {snippet: {}},
+      transcription: {snippet: {}}
     }
   },
   autocompleteQuery: {
@@ -60,8 +56,6 @@ const config = {
   apiConnector: connector,
   alwaysSearchOnInitialLoad: true
 };
-
-
 
 export default function App() {
   return (
