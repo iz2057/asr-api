@@ -18,10 +18,44 @@ This repo creates a speech-to-text microservice. The repo is structured as follo
 ```
 # Requirements: 
 1. Docker (microservice is run on a debian-11-bullseye image on GCP, see Docker installation [here](https://docs.docker.com/engine/install/debian/))
-2. Docker compose, if not already installed with docker
+2. Docker-compose, if not already installed with docker
 3. Google Cloud SDK (for convenience if deploying on cloud, (here)[https://cloud.google.com/sdk/docs/install])
 
 Additionally, the implementation on GCP can be found in *architure.pdf*. See `demo.ipynb` for a demonstration of the asr_api.
+
+# Demo:
+Refer to `demo.ipynb` for a demonstration, or run the following commands: 
+
+asr_api:
+```bash
+#ping the asr_api
+curl 'http://35.236.42.100:8001/ping'
+```
+
+
+Elastic-search:
+```bash
+#Query elastic-search server for rows with transcription containing the word 'boy'
+curl -X GET "http://34.94.242.203:9200/cv-transcriptions/_search" -H 'Content-Type: application/json' -d '
+{
+  "query": {
+    "match": {
+      "transcription": "boy"
+    }
+  }
+}'
+
+#Query elastic-search server for rows with duration less than 5 seconds
+curl -X GET "http://34.94.242.203:9200/cv-transcriptions/_search" -H 'Content-Type: application/json' -d
+  "query": {
+    "range": {
+      "duration": {
+        "lt": 5
+      }
+    }
+  }
+}'
+```
 
 
 # Getting Started
